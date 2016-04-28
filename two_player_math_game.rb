@@ -28,6 +28,12 @@ def setup_players
   end
 end
 
+def resurrection
+  @dead_players = []
+  @p2[:lives] = 3
+  @p1[:lives] = 3
+end
+
 def player_dead?(player)
   player[:lives] == 0
 end 
@@ -46,6 +52,7 @@ def end_game?
   response = gets.chomp
   if response == "y"
     puts "Alright! Once again..."
+    resurrection
     repl
   else
     @game_on = false 
@@ -53,17 +60,39 @@ def end_game?
   end
 end
 
-def ask_question(player)
-  num1 = rand(20)
-  num2 = rand(20)
-  answer = num1 + num2
-  puts "#{player[:name]}, what is #{num1} plus #{num2}?"
+def create_question(player)
+  question_type = rand(3)
+  # 0 == Addition, 1 == Subtraction, 2 == Multiplication, 
+  case(question_type)
+  when(0)
+    num1 = rand(30)
+    num2 = rand(30)
+    answer = num1 + num2
+    type = "plus"
+  when(1)
+    num1 = rand(20)
+    num2 = rand(20)
+    answer = num1 - num2
+    type = "minus"
+  when(2)
+    num1 = rand(10)
+    num2 = rand(10)
+    answer = num1 * num2
+    type = "times"
+  else
+    exit
+  end
+  ask_question(player,num1,num2,answer,type)
+end
+
+def ask_question(player,num1,num2,answer,verb)
+  puts "#{player[:name]}, what is #{num1} #{verb} #{num2}?"
   response = gets.chomp.to_i
   if response == answer
     puts "Great!"
     player[:score] += 1
   else
-    puts "Wrong!"
+    puts "Wrong! The answer is #{answer}"
     player[:lives] -= 1
     puts "#{player[:name]}, you have #{player[:lives]} #{player[:lives] == 1 ? 'life' : 'lives'} left."
   end
@@ -74,10 +103,10 @@ def repl
   setup_players if @first_time == true
   @first_time = false
   while @game_on    
-    ask_question(@p1)
+    create_question(@p1)
     check_lives(@p1,@p2)
-    ask_question(@p2)
-    check_lives(@p1,@p2)
+    create_question(@p2) if @game_on
+    check_lives(@p1,@p2) if @game_on
   end 
 end
 
