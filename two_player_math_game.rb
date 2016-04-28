@@ -56,7 +56,7 @@ def end_game?
     repl
   else
     @game_on = false 
-    puts "OK! Bye!"
+    puts "OK! #{@p1[:name]}, you scored #{@p1[:score]} points, and, #{@p2[:name]}, you scored #{@p1[:score]} points."
   end
 end
 
