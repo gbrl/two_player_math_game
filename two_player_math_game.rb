@@ -20,9 +20,11 @@ def setup_players
       puts "Welcome, #{@p2[:name]}!"
     else
       puts "Sorry, that name is too short!"
+      exit
     end
   else
     puts "Sorry, your name is too short!"
+    exit
   end
 end
 
