@@ -24,6 +24,33 @@ class Player
   end
 end
 
+class Question
+  attr_reader :answer, :string
+
+  def initialize(player)
+    question_type = rand(3)
+    # 0 == Addition, 1 == Subtraction, 2 == Multiplication, 
+    case(question_type)
+    when(0)
+      type = "plus"
+      num1 = rand(1..30)
+      num2 = rand(1..30)
+    when(1)
+      type = "minus"
+      num1 = rand(1..20)
+      num2 = rand(1..20)
+    when(2)
+      type = "times"
+      num1 = rand(2..10)
+      num2 = rand(2..10)
+    else
+      exit
+    end
+    @answer = num1 + num2
+    @string = "#{player.name}, what is #{num1} #{type} #{num2}?"
+  end
+end
+
 @game_on = true
 @first_time = true
 
@@ -51,40 +78,15 @@ def setup_players
   end
 end
 
-def create_question(player)
-  question_type = rand(3)
-  # 0 == Addition, 1 == Subtraction, 2 == Multiplication, 
-  case(question_type)
-  when(0)
-    num1 = rand(1..30)
-    num2 = rand(1..30)
-    answer = num1 + num2
-    type = "plus"
-  when(1)
-    num1 = rand(1..20)
-    num2 = rand(1..20)
-    answer = num1 - num2
-    type = "minus"
-  when(2)
-    num1 = rand(2..10)
-    num2 = rand(2..10)
-    answer = num1 * num2
-    type = "times"
-  else
-    exit
-  end
-  question = "#{player.name}, what is #{num1} #{type} #{num2}?"
-  ask_question(player,question,answer)
-end
-
-def ask_question(player,question,answer)
-  puts question
+def ask_question(player)
+  question = Question.new(player)
+  puts question.string
   response = gets.chomp.to_i
-  if response == answer
+  if response == question.answer
     puts "CORRECT!"
     player.score_point
   else
-    puts "WRONG! The answer is #{answer}"
+    puts "WRONG! The answer is #{question.answer}"
     player.lose_a_life
     puts "#{player.name}, you have #{player.lives} #{player.lives == 1 ? 'life' : 'lives'} left."
   end
@@ -121,7 +123,7 @@ def repl
     @first_time = false
   end
   [@p1,@p2].each do |player|
-    create_question(player) if @game_on
+    ask_question(player) if @game_on
   end
 end
 
