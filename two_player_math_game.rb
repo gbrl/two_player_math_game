@@ -56,16 +56,14 @@ def resurrection(*players)
 end
 
 
-def check_lives(*players)
-  players.each do |player|
-    if player.dead?
-      puts "Game over, #{@dead_players[0]}, you lost! :("
-      end_game?  
-    end
+def check_lives(player)
+  if player.dead?
+    puts "Game over, #{player.name}, you lost! :("
+    play_again?
   end
 end
 
-def end_game?
+def play_again?
   puts "Wanna play again? (y/n)"
   response = gets.chomp
   if response == "y"
@@ -121,10 +119,12 @@ def repl
   setup_players if @first_time == true
   @first_time = false
   while @game_on    
-    create_question(@p1)
-    check_lives(@p1,@p2)
-    create_question(@p2) if @game_on
-    check_lives(@p1,@p2) if @game_on
+    [@p1,@p2].each do |player|
+      if @game_on
+         create_question(player)
+         check_lives(player)
+      end
+    end
   end 
 end
 
