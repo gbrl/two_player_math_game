@@ -51,48 +51,23 @@ def setup_players
   end
 end
 
-def resurrection(*players)
-  players.each {|p| p.resurrect } 
-end
-
-
-def check_lives(player)
-  if player.dead?
-    puts "Game over, #{player.name}, you lost! :("
-    play_again?
-  end
-end
-
-def play_again?
-  puts "Wanna play again? (y/n)"
-  response = gets.chomp
-  if response == "y"
-    puts "Alright! Once again..."
-    resurrection(@p1,@p2)
-    repl
-  else
-    @game_on = false 
-    puts "OK! #{@p1.name}, you scored #{@p1.score} points, and, #{@p2.name}, you scored #{@p2.score} points."
-  end
-end
-
 def create_question(player)
   question_type = rand(3)
   # 0 == Addition, 1 == Subtraction, 2 == Multiplication, 
   case(question_type)
   when(0)
-    num1 = rand(30)
-    num2 = rand(30)
+    num1 = rand(1..30)
+    num2 = rand(1..30)
     answer = num1 + num2
     type = "plus"
   when(1)
-    num1 = rand(20)
-    num2 = rand(20)
+    num1 = rand(1..20)
+    num2 = rand(1..20)
     answer = num1 - num2
     type = "minus"
   when(2)
-    num1 = rand(10)
-    num2 = rand(10)
+    num1 = rand(2..10)
+    num2 = rand(2..10)
     answer = num1 * num2
     type = "times"
   else
@@ -114,6 +89,30 @@ def ask_question(player,question,answer)
     puts "#{player.name}, you have #{player.lives} #{player.lives == 1 ? 'life' : 'lives'} left."
   end
   check_lives(player)
+end
+
+def check_lives(player)
+  if player.dead?
+    puts "Game over, #{player.name}, you lost! :("
+    play_again?
+  end
+end
+
+def play_again?
+  puts "Wanna play again? (y/n)"
+  response = gets.chomp
+  if response == "y"
+    puts "Alright! Once again..."
+    resurrection(@p1,@p2)
+    repl
+  else
+    @game_on = false 
+    puts "OK! #{@p1.name}, you scored #{@p1.score} points, and, #{@p2.name}, you scored #{@p2.score} points."
+  end
+end
+
+def resurrection(*players)
+  players.each {|p| p.resurrect } 
 end
 
 def repl
