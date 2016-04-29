@@ -98,17 +98,18 @@ def create_question(player)
   else
     exit
   end
-  ask_question(player,num1,num2,answer,type)
+  question = "#{player.name}, what is #{num1} #{verb} #{num2}?"
+  ask_question(player,question,answer)
 end
 
-def ask_question(player,num1,num2,answer,verb)
-  puts "#{player.name}, what is #{num1} #{verb} #{num2}?"
+def ask_question(player,question,answer)
+  puts question
   response = gets.chomp.to_i
   if response == answer
-    puts "Great!"
+    puts "CORRECT!"
     player.score_point
   else
-    puts "Wrong! The answer is #{answer}"
+    puts "WRONG! The answer is #{answer}"
     player.lose_a_life
     puts "#{player.name}, you have #{player.lives} #{player.lives == 1 ? 'life' : 'lives'} left."
   end
