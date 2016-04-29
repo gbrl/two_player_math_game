@@ -98,7 +98,7 @@ def create_question(player)
   else
     exit
   end
-  question = "#{player.name}, what is #{num1} #{verb} #{num2}?"
+  question = "#{player.name}, what is #{num1} #{type} #{num2}?"
   ask_question(player,question,answer)
 end
 
