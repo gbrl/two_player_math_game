@@ -113,6 +113,7 @@ def ask_question(player,question,answer)
     player.lose_a_life
     puts "#{player.name}, you have #{player.lives} #{player.lives == 1 ? 'life' : 'lives'} left."
   end
+  check_lives(player)
 end
 
 def repl
@@ -121,10 +122,7 @@ def repl
   @first_time = false
   while @game_on    
     [@p1,@p2].each do |player|
-      if @game_on
-         create_question(player)
-         check_lives(player)
-      end
+      create_question(player)
     end
   end 
 end
