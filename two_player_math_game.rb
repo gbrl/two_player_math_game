@@ -104,7 +104,6 @@ def offer_another_round
   if response == "y"
     puts "Alright! Once again..."
     resurrection(@p1,@p2)
-    repl
   else
     @game_on = false 
     puts "OK! #{@p1.name}, you scored #{@p1.score} points, and, #{@p2.name}, you scored #{@p2.score} points."
@@ -119,11 +118,11 @@ def repl
   puts "It's the MATH GAME!"
   setup_players if @first_time == true
   @first_time = false
-  while @game_on    
-    [@p1,@p2].each do |player|
-      create_question(player)
-    end
-  end 
+  [@p1,@p2].each do |player|
+    create_question(player)
+  end
 end
 
+while @game_on
 repl
+end
