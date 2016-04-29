@@ -115,7 +115,7 @@ def ask_question(player,num1,num2,answer,verb)
 end
 
 def repl
-  puts "It's the MATH GUESSING GAME!"
+  puts "It's the MATH GAME!"
   setup_players if @first_time == true
   @first_time = false
   while @game_on    
