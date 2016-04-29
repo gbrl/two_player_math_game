@@ -115,14 +115,16 @@ def resurrection(*players)
 end
 
 def repl
-  puts "It's the MATH GAME!"
-  setup_players if @first_time == true
-  @first_time = false
+  if @first_time == true
+    puts "It's the MATH GAME!"
+    setup_players 
+    @first_time = false
+  end
   [@p1,@p2].each do |player|
-    create_question(player)
+    create_question(player) if @game_on
   end
 end
 
 while @game_on
-repl
+  repl
 end
