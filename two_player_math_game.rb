@@ -94,11 +94,11 @@ end
 def check_lives(player)
   if player.dead?
     puts "Game over, #{player.name}, you lost! :("
-    play_again?
+    offer_another_round
   end
 end
 
-def play_again?
+def offer_another_round
   puts "Wanna play again? (y/n)"
   response = gets.chomp
   if response == "y"
