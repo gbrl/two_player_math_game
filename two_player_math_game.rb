@@ -1,7 +1,30 @@
-@p1 = {name: "", score: 0, lives: 3}
-@p2 = {name: "", score: 0, lives: 3}
+class Player
+  attr_accessor :name, :score, :lives
+
+  def initialize(name,score=0,lives=3)
+    @name = name
+    @score = score
+    @lives = lives
+  end
+
+  def resurrect
+    self.lives = 3
+  end
+
+  def dead?
+    self.lives == 0
+  end 
+
+  def score_point
+    self.score += 1
+  end
+
+  def lose_a_life
+    self.lives -= 1
+  end
+end
+
 @game_on = true
-@dead_players = []
 @first_time = true
 
 def validate_name(name)
@@ -12,12 +35,12 @@ def setup_players
   puts "What's your name?"
   p1_name = gets.chomp 
   if validate_name(p1_name)
-    @p1[:name] = p1_name
-    puts "Okay, #{@p1[:name]}, what's your opponent's name?"
+    @p1 = Player.new(p1_name)
+    puts "Okay, #{@p1.name}, what's your opponent's name?"
     p2_name = gets.chomp
     if validate_name(p2_name)
-      @p2[:name] = p2_name
-      puts "Welcome, #{@p2[:name]}!"
+      @p2 = Player.new(p2_name)
+      puts "Welcome, #{@p2.name}!"
     else
       puts "Sorry, that name is too short!"
       exit
@@ -28,22 +51,17 @@ def setup_players
   end
 end
 
-def resurrection
-  @dead_players = []
-  @p2[:lives] = 3
-  @p1[:lives] = 3
+def resurrection(*players)
+  players.each {|p| p.resurrect } 
 end
 
-def player_dead?(player)
-  player[:lives] == 0
-end 
 
-def check_lives(p1,p2)
-  @dead_players << @p1[:name] if @p1[:lives] == 0
-  @dead_players << @p2[:name] if @p2[:lives] == 0
-  if @dead_players.length > 0
-    puts "Game over, #{@dead_players[0]}, you lost! :("
-    end_game?
+def check_lives(*players)
+  players.each do |player|
+    if player.dead?
+      puts "Game over, #{@dead_players[0]}, you lost! :("
+      end_game?  
+    end
   end
 end
 
@@ -52,11 +70,11 @@ def end_game?
   response = gets.chomp
   if response == "y"
     puts "Alright! Once again..."
-    resurrection
+    resurrection(@p1,@p2)
     repl
   else
     @game_on = false 
-    puts "OK! #{@p1[:name]}, you scored #{@p1[:score]} points, and, #{@p2[:name]}, you scored #{@p1[:score]} points."
+    puts "OK! #{@p1.name}, you scored #{@p1.score} points, and, #{@p2.name}, you scored #{@p2.score} points."
   end
 end
 
@@ -86,15 +104,15 @@ def create_question(player)
 end
 
 def ask_question(player,num1,num2,answer,verb)
-  puts "#{player[:name]}, what is #{num1} #{verb} #{num2}?"
+  puts "#{player.name}, what is #{num1} #{verb} #{num2}?"
   response = gets.chomp.to_i
   if response == answer
     puts "Great!"
-    player[:score] += 1
+    player.score_point
   else
     puts "Wrong! The answer is #{answer}"
-    player[:lives] -= 1
-    puts "#{player[:name]}, you have #{player[:lives]} #{player[:lives] == 1 ? 'life' : 'lives'} left."
+    player.lose_a_life
+    puts "#{player.name}, you have #{player.lives} #{player.lives == 1 ? 'life' : 'lives'} left."
   end
 end
 
